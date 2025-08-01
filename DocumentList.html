@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Docuemnt List</title>
+    <link href="./css/bootstrap.css" rel="stylesheet" />
+    <script src="./js/bootstrap.bundle.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+      // Add this function to populate the edit modal
+      function openEditModal(encodedName) {
+        const name = decodeURIComponent(encodedName);
+        const documents =
+          JSON.parse(localStorage.getItem("local_documents")) || [];
+        const doc = documents.find((d) => d.name === name);
+        if (doc) {
+          document.getElementById("editDocumentLabel").value = doc.label;
+          document.getElementById("editDocumentName").value = doc.name;
+          window.editingDocumentOriginalName = doc.name; // Store original name for saving
+        }
+      }
+
+      // Handle edit form submission
+      document.addEventListener("DOMContentLoaded", function () {
+        const editForm = document.getElementById("editForm");
+        if (editForm) {
+          editForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const newLabel = document.getElementById("editDocumentLabel").value;
+
+            // Update the document in local_documents
+            let documents =
+              JSON.parse(localStorage.getItem("local_documents")) || [];
+            const idx = documents.findIndex(
+              (d) => d.name === window.editingDocumentOriginalName
+            );
+            if (idx !== -1) {
+              documents[idx].label = newLabel;
+              localStorage.setItem(
+                "local_documents",
+                JSON.stringify(documents)
+              );
+            }
+
+            // Update the document in shared_documents
+            let sharedocuments =
+              JSON.parse(localStorage.getItem("shared_documents")) || [];
+            const idx1 = documents.findIndex(
+              (d) => d.name === window.editingDocumentOriginalName
+            );
+            if (idx1 !== -1) {
+              documents[idx1].slabel = newLabel;
+              localStorage.setItem(
+                "shared_documents",
+                JSON.stringify(documents)
+              );
+            }
+            // Close modal
+            var editModal = bootstrap.Modal.getInstance(
+              document.getElementById("editModal")
+            );
+            if (editModal) editModal.hide();
+            window.location.reload();
+          });
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid justify-content-center">
+        <div
+          class="collapse navbar-collapse justify-content-center"
+          id="navbarSupportedContent"
+        >
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./GroupChat.html"
+                >Group Chat</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./UserList.html"
+                >Manage Users</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./DocumentList.html"
+                >Manage Documents</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                "
+                href="./Welcome.html"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-center align-items-center my-2">
+      <span class="navbar-text">
+        <script>
+          const loggedInUser = getLoggedInUser();
+          document.write(`<h3> Welcome, <strong>${loggedInUser}</strong></h3>`);
+        </script>
+      </span>
+    </div>
+    <div class="container mt-4">
+      <h1>My Uploads</h1>
+      <table
+        id="userDocumentTable"
+        class="table table-hover table-striped table-bordered"
+        style="border: 2px solid #dee2e6"
+      >
+        <tr>
+          <th>Label</th>
+          <th>File Name</th>
+          <th>Actions</th>
+        </tr>
+        <script>
+          renderUserDocuments();
+        </script>
+      </table>
+
+      <!-- Modal for delete -->
+      <div
+        class="modal fade"
+        id="deleteModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Confirm User Deletion
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">Are you sure?</div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="deleteDocument()"
+              >
+                OK
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <!-- Upload Button -->
+        <button
+          type="button"
+          class="btn btn-success"
+          data-bs-toggle="modal"
+          data-bs-target="#uploadModal"
+        >
+          Upload Document
+        </button>
+        <!-- Edit Modal -->
+        <div
+          class="modal fade"
+          id="editModal"
+          tabindex="-1"
+          aria-labelledby="editModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editModalLabel">
+                  Edit Document
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form id="editForm">
+                  <div class="mb-3">
+                    <label for="editDocumentLabel" class="form-label"
+                      >Label</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="editDocumentLabel"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="editDocumentName" class="form-label"
+                      >File Name</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="editDocumentName"
+                      readonly
+                      disabled
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    Save Changes
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Upload Modal -->
+        <div
+          class="modal fade"
+          id="uploadModal"
+          tabindex="-1"
+          aria-labelledby="uploadModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="uploadModalLabel">
+                  Upload Document
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form id="uploadForm">
+                  <div class="mb-3">
+                    <label for="documentLabel" class="form-label">Label</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="documentLabel"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="documentFile" class="form-label">File</label>
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="documentFile"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          document
+            .getElementById("uploadForm")
+            .addEventListener("submit", handleUploadFormSubmit);
+        </script>
+      </div>
+    </div>
+
+    <div class="container mt-4">
+      <h1>Shared Uploads</h1>
+      <table
+        id="userSharedDocumentTable"
+        class="table table-hover table-striped table-bordered"
+        style="border: 2px solid #dee2e6"
+      >
+        <tr>
+          <th>Label</th>
+          <th>Filename</th>
+          <th>Shared By</th>
+        </tr>
+        <script>
+          const userSharedDocuments =
+            JSON.parse(localStorage.getItem("shared_documents")) || [];
+          const sharedTable = document.getElementById(
+            "userSharedDocumentTable"
+          );
+
+          for (let i = 0; i < userSharedDocuments.length; i++) {
+            const sdocument = userSharedDocuments[i];
+            document.write(`
+              <tr>
+                  <td>${sdocument.slabel}</td>
+                  <td>${sdocument.sname}</td>
+                  <td>${sdocument.semail}</td>
+                </tr>
+              `);
+          }
+          document.write(`</table>`);
+        </script>
+      </table>
+    </div>
+  </body>
+</html>

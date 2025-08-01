@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit User</title>
+    <link href="./css/bootstrap.css" rel="stylesheet" />
+    <script src="./js/bootstrap.bundle.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+      user_id = window.location.href.split("id=")[1];
+      users = JSON.parse(localStorage.getItem("local_usr"));
+      userInfo = users.find((user) => user.id == user_id);
+    </script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid justify-content-center">
+        <div
+          class="collapse navbar-collapse justify-content-center"
+          id="navbarSupportedContent"
+        >
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./GroupChat.html"
+                >Group Chat</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./UserList.html"
+                >Manage Users</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./DocumentList.html"
+                >Manage Documents</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                "
+                href="./Welcome.html"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-center align-items-center my-2">
+      <span class="navbar-text">
+        <script>
+          const loggedInUser = getLoggedInUser();
+          document.write(`<h3> Welcome, <strong>${loggedInUser}</strong></h3>`);
+        </script>
+      </span>
+    </div>
+    <div class="container d-flex justify-content-center align-items-center">
+      <div class="col-md-5 border rounded p-4 shadow">
+        <form
+          action="./UserList.html"
+          method="get"
+          onsubmit="return updateUser()"
+        >
+          <h1 class="text-center mb-4">Update user info</h1>
+          <label for="Full_Name" class="form-label">Full Name</label>
+          <input
+            type="text"
+            id="Full_Name"
+            name="Full Name"
+            class="form-control"
+          />
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="Email" class="form-control" />
+          </div>
+
+          <div class="d-grid">
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <a href="./UserList.html" class="btn btn-secondary">Cancel</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("Full_Name").value = userInfo.name;
+      document.getElementById("email").value = userInfo.email;
+    </script>
+  </body>
+</html>

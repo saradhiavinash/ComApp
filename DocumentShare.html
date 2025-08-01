@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Share</title>
+    <link href="./css/bootstrap.css" rel="stylesheet" />
+    <script src="./js/bootstrap.bundle.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+      window.onload = refreshUserDocumentTable;
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid justify-content-center">
+        <div
+          class="collapse navbar-collapse justify-content-center"
+          id="navbarSupportedContent"
+        >
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./GroupChat.html"
+                >Group Chat</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./UserList.html"
+                >Manage Users</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./DocumentList.html"
+                >Manage Documents</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                "
+                href="./Welcome.html"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-center align-items-center my-2">
+      <span class="navbar-text">
+        <script>
+          const loggedInUser = getLoggedInUser();
+          document.write(`<h3> Welcome, <strong>${loggedInUser}</strong></h3>`);
+        </script>
+      </span>
+    </div>
+    <div class="container mt-4">
+      <h3 id="documentTitle"></h3>
+      <script>
+        const documentname = window.location.href.split("name=")[1];
+        document.getElementById(
+          "documentTitle"
+        ).textContent = `Upload sharing: ${documentname}`;
+      </script>
+
+      <table
+        id="userDocumentTable"
+        class="table table-hover table-striped table-bordered"
+        style="border: 2px solid #dee2e6"
+      >
+        <tr>
+          <th>Shared Document</th>
+          <th>Action</th>
+        </tr>
+      </table>
+    </div>
+
+    <div class="container mt-4">
+      <h3>Addsharing</h3>
+      <label for="userSelect">Choose user:</label>
+      <select
+        id="userSelect"
+        class="form-select"
+        style="width: auto; display: inline-block"
+      ></select>
+      <script>
+        populateUserSelect();
+      </script>
+      <button
+        class="btn btn-primary"
+        onclick="AddShare()"
+        style="margin-left: 10px"
+      >
+        Add Share
+      </button>
+    </div>
+    <!-- Delete Modal -->
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Remove Share</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">Are you sure?</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="deleteSahredDocument()"
+            >
+              OK
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

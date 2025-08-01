@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Successful</title>
+    <link href="./css/bootstrap.css" rel="stylesheet" />
+    <script src="./js/bootstrap.bundle.js"></script>
+    <script src="./js/script.js"></script>
+  </head>
+
+  <body>
+    <form>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid justify-content-center">
+          <div
+            class="collapse navbar-collapse justify-content-center"
+            id="navbarSupportedContent"
+          >
+            <ul class="navbar-nav mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link btn btn-lg px-4 py-2"
+                  style="
+                    background: transparent;
+                    border: 2px solid rgba(0, 0, 0, 0.2);
+                    margin-right: 10px;
+                  "
+                  href="./GroupChat.html"
+                  >Group Chat</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link btn btn-lg px-4 py-2"
+                  style="
+                    background: transparent;
+                    border: 2px solid rgba(0, 0, 0, 0.2);
+                    margin-right: 10px;
+                  "
+                  href="./UserList.html"
+                  >Manage Users</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link btn btn-lg px-4 py-2"
+                  style="
+                    background: transparent;
+                    border: 2px solid rgba(0, 0, 0, 0.2);
+                    margin-right: 10px;
+                  "
+                  href="./DocumentList.html"
+                  >Manage Documents</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link btn btn-lg px-4 py-2"
+                  style="
+                    background: transparent;
+                    border: 2px solid rgba(0, 0, 0, 0.2);
+                  "
+                  href="./Welcome.html"
+                  >Logout</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="container d-flex justify-content-center align-items-center">
+        <script>
+          const loggedInUser = getLoggedInUser();
+          document.write(`
+                        <h1>Login Successful! Welcome, ${loggedInUser}</h1
+                        `);
+        </script>
+      </div>
+    </form>
+  </body>
+</html>

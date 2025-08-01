@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link href="./css/bootstrap.css" rel="stylesheet" />
+    <script src="./js/bootstrap.bundle.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+      window.onload = function () {
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+      };
+    </script>
+    <script>
+      function validate() {
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        if (email === "" || password === "") {
+          alert("Please fill all the fields");
+          return false;
+        } else {
+          let existingUser =
+            JSON.parse(localStorage.getItem("local_usr")) || [];
+          if (existingUser.length === 0) {
+            alert("No users registered. Please register first.");
+            return false;
+          } else {
+            for (let i = 0; i < existingUser.length; i++) {
+              const user = existingUser[i];
+              if (user.email === email && user.password === password) {
+                sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+                return true;
+              }
+            }
+            alert("Invalid email or password");
+            return false;
+          }
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="container d-flex justify-content-center align-items-center">
+      <div class="col-md-5 border rounded p-4 shadow">
+        <form
+          action="./Login-success.html"
+          method="get"
+          onsubmit="return validate()"
+        >
+          <h1 class="text-center mb-4">Login</h1>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="Email" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="Password"
+              class="form-control"
+            />
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

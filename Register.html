@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Communication Application</title>
+    <link href="./css/bootstrap.css" rel="stylesheet" />
+    <script src="./js/bootstrap.bundle.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+      window.onload = function () {
+        // Clear all input fields in the form
+        document.getElementById("Full_Name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("cpassword").value = "";
+      };
+    </script>
+  </head>
+
+  <body class="bg-light">
+    <div class="container d-flex justify-content-center align-items-center">
+      <div class="col-md-6 border rounded p-4 shadow bg-white">
+        <form
+          action="./Registartion-success.html"
+          method="get"
+          onsubmit="return userRegistration()"
+        >
+          <h1 class="text-center mb-4">Register</h1>
+          <label for="Full_Name" class="form-label">Full Name</label>
+          <input
+            type="text"
+            id="Full_Name"
+            name="Full Name"
+            class="form-control"
+          />
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="Email" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="Password"
+              class="form-control"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="cpassword" class="form-label">Confirm Password</label>
+            <input
+              type="password"
+              id="cpassword"
+              name="cpassword"
+              class="form-control"
+            />
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

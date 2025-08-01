@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Group Chat</title>
+    <link href="./css/bootstrap.css" rel="stylesheet" />
+    <script src="./js/bootstrap.bundle.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        renderMessages();
+
+        const sendBtn = document.querySelector(".btn-primary");
+        const refreshBtn = document.querySelector(".btn-secondary");
+        const input = document.querySelector('.chat-footer input[type="text"]');
+
+        sendBtn.addEventListener("click", function () {
+          const text = input.value.trim();
+          if (!text) return;
+          const messages = getMessages();
+          messages.push({
+            time: new Date().toISOString().replace("T", " ").substring(0, 19),
+            user: getLoggedInUser(),
+            text: text,
+          });
+          saveMessages(messages);
+          renderMessages();
+          input.value = "";
+        });
+
+        refreshBtn.addEventListener("click", renderMessages);
+
+        input.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            sendBtn.click();
+          }
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid justify-content-center">
+        <div
+          class="collapse navbar-collapse justify-content-center"
+          id="navbarSupportedContent"
+        >
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link active btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./GroupChat.html"
+                >Group Chat</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./UserList.html"
+                >Manage Users</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                  margin-right: 10px;
+                "
+                href="./DocumentList.html"
+                >Manage Documents</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-lg px-4 py-2"
+                style="
+                  background: transparent;
+                  border: 2px solid rgba(0, 0, 0, 0.2);
+                "
+                href="./Welcome.html"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-center align-items-center my-2">
+      <span class="navbar-text">
+        <script>
+          const loggedInUser = getLoggedInUser();
+          document.write(`<h3> Welcome, <strong>${loggedInUser}</strong></h3>`);
+        </script>
+      </span>
+    </div>
+    <div
+      class="chat-window shadow"
+      style="width: 100%; max-width: 600px; margin: 40px auto"
+    >
+      <div
+        class="chat-body"
+        id="chatBody"
+        style="
+          height: 600px;
+          overflow-y: auto;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 10px;
+          background: #fafbfc;
+        "
+      >
+        <!-- Messages will be dynamically inserted here -->
+      </div>
+
+      <div class="chat-footer d-flex mt-2">
+        <input
+          type="text"
+          class="form-control me-2"
+          placeholder="Type your message..."
+        />
+        <button class="btn btn-primary me-2">Send</button>
+        <button class="btn btn-secondary">Refresh</button>
+      </div>
+    </div>
+  </body>
+</html>
