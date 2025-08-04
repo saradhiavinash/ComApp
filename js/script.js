@@ -112,13 +112,22 @@ function deleteDocumentName(name) {
   window.deleteDocumentName = decodeURIComponent(name);
 }
 
-// Function to delete a document by name from localStorage
+// Function to delete a document by name from localStorage and shared_documents
 function deleteDocument() {
   let documents = JSON.parse(localStorage.getItem("local_documents")) || [];
   documents = documents.filter(
     (document) => document.name !== window.deleteDocumentName
   );
   localStorage.setItem("local_documents", JSON.stringify(documents));
+
+  // Also remove from shared_documents if present
+  let sharedDocuments =
+    JSON.parse(localStorage.getItem("shared_documents")) || [];
+  sharedDocuments = sharedDocuments.filter(
+    (doc) => doc.sname !== window.deleteDocumentName
+  );
+  localStorage.setItem("shared_documents", JSON.stringify(sharedDocuments));
+
   window.location.reload();
 }
 
@@ -199,10 +208,7 @@ function deleteSahredDocument() {
   const sharedDocuments =
     JSON.parse(localStorage.getItem("shared_documents")) || [];
   const updatedDocuments = sharedDocuments.filter(
-    (doc) =>
-      !(
-        doc.suser === window.deleteUser
-      )
+    (doc) => !(doc.suser === window.deleteUser)
   );
   localStorage.setItem("shared_documents", JSON.stringify(updatedDocuments));
   refreshUserDocumentTable();
@@ -240,6 +246,10 @@ function refreshUserDocumentTable() {
 // Function to add a shared document entry for a selected user
 function AddShare() {
   const selectedUser = userSelect.value;
+  if (!selectedUser) {
+    alert("Select user first");
+    return false;
+  }
   const documentName = decodeURIComponent(
     window.location.href.split("name=")[1]
   );
@@ -247,11 +257,11 @@ function AddShare() {
     JSON.parse(localStorage.getItem("shared_documents")) || [];
   sharedDocuments.push({
     sname: documentName,
-    slabel: JSON.parse(
-      localStorage.getItem("local_documents")
-    ).find((doc) => doc.name === documentName).label,
+    slabel: JSON.parse(localStorage.getItem("local_documents")).find(
+      (doc) => doc.name === documentName
+    ).label,
     suser: selectedUser,
-    semail: JSON.parse(sessionStorage.getItem("loggedInUser")).email
+    semail: JSON.parse(sessionStorage.getItem("loggedInUser")).email,
   });
   localStorage.setItem("shared_documents", JSON.stringify(sharedDocuments));
   refreshUserDocumentTable();

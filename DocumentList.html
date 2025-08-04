@@ -41,23 +41,25 @@
               );
             }
 
-            // Update the document in shared_documents
-            let sharedocuments =
+            // Update the document in shared_documents if present
+            let sharedDocuments =
               JSON.parse(localStorage.getItem("shared_documents")) || [];
-            const idx1 = documents.findIndex(
-              (d) => d.name === window.editingDocumentOriginalName
+            const sharedIdx = sharedDocuments.findIndex(
+              (d) => d.sname === window.editingDocumentOriginalName
             );
-            if (idx1 !== -1) {
-              documents[idx1].slabel = newLabel;
+            if (sharedIdx !== -1) {
+              sharedDocuments[sharedIdx].slabel = newLabel;
               localStorage.setItem(
                 "shared_documents",
-                JSON.stringify(documents)
+                JSON.stringify(sharedDocuments)
               );
             }
-            // Close modal
-            var editModal = bootstrap.Modal.getInstance(
-              document.getElementById("editModal")
-            );
+
+            const editModalElement = document.getElementById("editModal");
+            const editModal = editModalElement
+              ? bootstrap.Modal.getInstance(editModalElement) ||
+                new bootstrap.Modal(editModalElement)
+              : null;
             if (editModal) editModal.hide();
             window.location.reload();
           });
